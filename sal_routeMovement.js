@@ -1,8 +1,10 @@
 //=================
-//sal_core.js
+//sal_roueMovement.js
 //=================
 /*:
- * @plugindesc (v.1.0) An experimental plugin to move event along region ID
+ * @plugindesc (v.1.1) An experimental plugin to move event along region ID
+ * Version 1.0 - release
+ * Version 1.1 - fixed issue where event returns back to starting coordinates when event blocks its path. Now, it just waits for its turn.
  *
  * @author autodidact (Samuel Carrillo)
  *
