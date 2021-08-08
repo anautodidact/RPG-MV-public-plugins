@@ -48,7 +48,6 @@ _sal.routeMovement = {};
 
 (function($){
 
-var lastTileOnPath = {};
 //No parameters
 //var parameters = PluginManager.parameters("sal_routeMovement");
 
@@ -70,7 +69,6 @@ function ifRegionExistsAhead(currentevent, thisX, thisY, thisR) {
     if (compass[i] == 6) {xvariance = -1;} //right
     if (compass[i] == 8) {yvariance = 1;} //up
 
-    console.log(compass[i] + "variance: "+ xvariance);
     if (thisR == $gameMap.regionId(thisX+xvariance, thisY+yvariance) && currentevent._direction != compass[i]) { 
       //if the region exists in this direction.
       regionExistsInDirection.push(com[i]);
@@ -88,18 +86,16 @@ function ifRegionExistsAhead(currentevent, thisX, thisY, thisR) {
 
 _sal.routeMovement.moveAlongRegion = function(currentevent, selfswitch, blockedSelfSwitch) {
   currentevent._sal_routemovement = currentevent._sal_routemovement || {};
-  //console.log(currentevent._sal_routemovement.pathIsClear);
   currentevent._sal_routemovement.pathIsClear = currentevent._sal_routemovement.pathIsClear ?? true; //used || but with a booleean check it always gave the wrong result. ?? is good for a boolean check since it only looks for null or undefined.
 
   let thisX = currentevent.x; //console.log(thisX);
   let thisY = currentevent.y; //console.log(thisY);
   let thisR = $gameMap.regionId(thisX, thisY); //console.log(thisR);
 
-  //console.log(currentevent._sal_routemovement.pathIsClear);
   if (currentevent._sal_routemovement.pathIsClear) {
   var movementPaths = ifRegionExistsAhead(currentevent, thisX, thisY, thisR); //this sets all all directional paths as available or unavailable.
 
-  //if you have reached end of route, all movement directions have a value of null, then activate switch (if user provided a switch), and end this funtion.
+  //if event has reached end of route, all movement directions have a value of null, then activate switch (if user provided a switch), and end this funtion.
   if (movementPaths.every(arrayIndex => arrayIndex == null)) {
     if (selfswitch) {
       selfswitch = selfswitch.toUpperCase();
@@ -112,8 +108,6 @@ _sal.routeMovement.moveAlongRegion = function(currentevent, selfswitch, blockedS
     return;
   }
 
-  console.log("x: " + thisX + " Y: " + thisY);
-  //console.log(movementPaths);
   var availablePaths = movementPaths.filter(pathExists => pathExists != null); //this filters movementPaths for only the options that are valid (not null) paths.
   //we are going to prefer the first available path.
   var pathAvailableInDirection = availablePaths[0]; //This should never return an empty undefined var since we do the check above. 
